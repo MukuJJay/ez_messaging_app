@@ -11,24 +11,32 @@ export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const hashedPassword = await hashingPassword(password); //hashing password
-
-    const createdUser = await UserModel.create({
+    const existingUsernameChecker = await UserModel.findOne({
       username: username,
-      email: email,
-      password: hashedPassword,
     });
-    if (createdUser) {
-      const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET);
 
-      res.status(201).json({
-        token: token,
-        message: `User ${createdUser.username} created successfully`,
-        status: true,
+    if (existingUsernameChecker) {
+      res.status(500).json({ message: "User Already Exists!" });
+    } else {
+      const hashedPassword = await hashingPassword(password); //hashing password
+      const createdUser = await UserModel.create({
+        username: username,
+        email: email,
+        password: hashedPassword,
       });
+
+      if (createdUser) {
+        const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET);
+
+        res.status(201).json({
+          token: token,
+          message: `User ${createdUser.username} created successfully`,
+          status: true,
+        });
+      }
     }
   } catch (error) {
-    res.status(500).json({ message: "User Already Exists!" });
+    console.log(error);
   }
 };
 

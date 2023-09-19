@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import ws from "ws";
 import userAuthRoutes from "./routes/userAuth.js";
-import users from "./routes/userRoutes.js";
+import users from "./routes/contacts.js";
 dotenv.config();
 
 const PORT = process.env.PORT;

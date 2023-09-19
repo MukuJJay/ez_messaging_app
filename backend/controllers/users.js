@@ -1,11 +1,20 @@
 import userModel from "../models/User.js";
 
 export const searchUsers = async (req, res) => {
-  const { username } = req.body;
-  const regexp = new RegExp("^" + username, "i");
+  const { usernameOrEmail } = req.body;
+  const regexp = new RegExp("^" + usernameOrEmail, "i");
 
-  const allUsers = await userModel.find({ username: regexp });
-  allUsers.map((e) => (e.password = ""));
+  const matchedUsernames = await userModel.find({ username: regexp });
+  const matchedEmails = await userModel.find({ email: regexp });
 
-  res.status(200).send(allUsers);
+  const matchedEnitites = [...matchedUsernames, ...matchedEmails];
+
+  const duplicatesRemovedList = matchedEmails.filter((obj, index, arr) => {
+    const indexofObj = arr.findIndex((item) => item.id === obj.id);
+    return indexofObj === index;
+  });
+
+  duplicatesRemovedList.map((e) => (e.password = null));
+
+  res.status(200).json({ data: duplicatesRemovedList });
 };
