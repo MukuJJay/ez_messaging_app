@@ -1,0 +1,23 @@
+<nav class="container">
+  <ul class="top-items">
+    <li
+      *ngFor="let icon of icons.topIcons; let i = index"
+      [class.active]="activeIndex === i"
+      (click)="setActiveClass(i)"
+      (click)="triggerAction(icon.name)"
+    >
+      <i class="{{ icon.i }} fa-lg" aria-hidden="true"></i>
+    </li>
+  </ul>
+  <ul class="bottom-items">
+    <li
+      *ngFor="let icon of icons.bottomIcons; let i = index"
+      [class.clicked]="isClickedIndex === i"
+      (click)="triggerAction(icon.name)"
+      (click)="iconClicker(i)"
+    >
+      <i class="{{ icon.i }} fa-lg" aria-hidden="true"></i>
+      <span *ngIf="icon.status" class="{{ icon.status }}"></span>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,58 @@
+<div class="container">
+  <h1 class="text-tertiary bold color-secondary" *ngIf="variant === 'Login'">
+    Login
+  </h1>
+  <h1 class="text-tertiary bold color-secondary" *ngIf="variant === 'Register'">
+    Register
+  </h1>
+
+  <form class="form" [formGroup]="authForm" (submit)="submit()">
+    <app-input
+      [value]="authForm.get('username')?.value"
+      (inputEmitter)="fetchingInput($event, 'username')"
+      [label]="'User Name'"
+      [name]="'UserName'"
+      [error]="authForm.get('username')?.hasError('pattern')"
+      *ngIf="variant === 'Register'"
+    ></app-input>
+    <app-input
+      [label]="'Email'"
+      [name]="'Email'"
+      [value]="authForm.get('email')?.value"
+      (inputEmitter)="fetchingInput($event, 'email')"
+    ></app-input>
+    <app-input
+      [label]="'Password'"
+      [name]="'password'"
+      [value]="authForm.get('password')?.value"
+      (inputEmitter)="fetchingInput($event, 'password')"
+    ></app-input>
+    <span
+      class="text-quinary"
+      (click)="switchVariant('Register')"
+      *ngIf="variant === 'Login'"
+      >Click here to create a new account</span
+    >
+    <span
+      class="text-quinary"
+      (click)="switchVariant('Login')"
+      *ngIf="variant === 'Register'"
+      >Return to Login Page</span
+    >
+    <app-button
+      [text]="variant"
+      class="btn"
+      [type]="'button-1'"
+      [disabled]="!authForm.valid"
+      [typeBtn]="false"
+    ></app-button>
+    <p class="text-quinary bold text-align-center">or continue with</p>
+    <app-button
+      class="btn"
+      [type]="'button-1'"
+      [icon]="'google'"
+      [size]="'lg'"
+      [width]="'30%'"
+    ></app-button>
+  </form>
+</div>

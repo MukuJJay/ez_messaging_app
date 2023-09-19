@@ -1,0 +1,16 @@
+<div class="template">
+  <label *ngIf="label" class="text-quaternary semi-bold" for="{{ label }}">{{
+    label
+  }}</label>
+  <input
+    class="text-tertiary {{ error ? 'hasError' : '' }}"
+    name="{{ name | lowercase }}"
+    placeholder="Enter {{ name }}"
+    type="{{ name | lowercase }}"
+    value="{{ value }}"
+    (input)="inputEmit($event)"
+  />
+  <span class="text-quinary error semi-bold color-danger" *ngIf="error">{{
+    error ? "Please Enter Correct value" : ""
+  }}</span>
+</div>

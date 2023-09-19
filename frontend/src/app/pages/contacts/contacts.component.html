@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="search">
+    <label for="search" class="text-secondary color-secondary"
+      >Search by Username</label
+    >
+    <input
+      name="search"
+      placeholder="Search by typing the username of an user"
+      (input)="fetchInp($event)"
+    />
+    <div class="onSearch" *ngIf="searchString"></div>
+  </div>
+</div>

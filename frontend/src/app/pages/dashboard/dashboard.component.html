@@ -1,0 +1,7 @@
+<div class="container">
+  <app-navbar (dashboardVariant)="switchVariant($event)"></app-navbar>
+  <app-contacts
+    class="contacts"
+    *ngIf="dashboardVariant === 'contacts'"
+  ></app-contacts>
+</div>
