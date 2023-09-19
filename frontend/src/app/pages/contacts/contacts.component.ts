@@ -16,6 +16,7 @@ export class ContactsComponent {
     this.searchString = ev.target.value;
     this.searchFormSvc.searchUsers(this.searchString).subscribe((res) => {
       this.searchedData = res.data;
+      console.log(this.searchedData);
     });
   }
 }

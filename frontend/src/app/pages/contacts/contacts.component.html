@@ -19,6 +19,12 @@
           <span class="color-danger">{{ searchedEnitity.email }}</span>
         </p>
       </div>
+      <p
+        class="text-secondary color-secondary"
+        *ngIf="searchedData?.length === 0"
+      >
+        No Data To Show
+      </p>
     </div>
   </div>
 </div>
