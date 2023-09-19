@@ -12,7 +12,7 @@ export class ApiService {
     return this.http.post(path, body) as Observable<any>;
   }
 
-  get(path: string, body: any) {
-    return this.http.get(path, body) as Observable<any>;
+  get(path: string) {
+    return this.http.get(path) as Observable<any>;
   }
 }

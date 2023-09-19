@@ -8,6 +8,17 @@
       placeholder="Search by typing the username of an user"
       (input)="fetchInp($event)"
     />
-    <div class="onSearch" *ngIf="searchString"></div>
+    <div class="onSearch" *ngIf="searchString">
+      <div class="singleEnitity" *ngFor="let searchedEnitity of searchedData">
+        <p class="text-quaternary color-secondary">
+          User Name:
+          <span class="color-danger">{{ searchedEnitity.username }}</span>
+        </p>
+        <p class="text-quaternary color-secondary">
+          Email:
+          <span class="color-danger">{{ searchedEnitity.email }}</span>
+        </p>
+      </div>
+    </div>
   </div>
 </div>

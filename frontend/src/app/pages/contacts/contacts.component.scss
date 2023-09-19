@@ -36,7 +36,22 @@
       left: 50%;
       transform: translateX(-50%);
       bottom: -50vh;
-      background-color: white;
+      background-color: var(--darkestPrimaryColor);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      .singleEnitity {
+        display: flex;
+        gap: 40px;
+        background-color: var(--primaryColor);
+        padding: 10px;
+        cursor: pointer;
+        p {
+          width: 200px;
+        }
+      }
     }
   }
 }

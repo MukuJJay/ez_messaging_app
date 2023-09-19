@@ -1,7 +1,7 @@
 import userModel from "../models/User.js";
 
 export const searchUsers = async (req, res) => {
-  const { usernameOrEmail } = req.body;
+  const usernameOrEmail = req.query.usernameOrEmail;
   const regexp = new RegExp("^" + usernameOrEmail, "i");
 
   const matchedUsernames = await userModel.find({ username: regexp });
@@ -9,7 +9,7 @@ export const searchUsers = async (req, res) => {
 
   const matchedEnitites = [...matchedUsernames, ...matchedEmails];
 
-  const duplicatesRemovedList = matchedEmails.filter((obj, index, arr) => {
+  const duplicatesRemovedList = matchedEnitites.filter((obj, index, arr) => {
     const indexofObj = arr.findIndex((item) => item.id === obj.id);
     return indexofObj === index;
   });

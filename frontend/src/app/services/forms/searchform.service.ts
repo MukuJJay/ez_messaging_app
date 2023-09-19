@@ -10,8 +10,8 @@ export class SearchformService {
 
   base_url = environment.base_url;
 
-  searchUsers(body: any) {
-    const path = `${this.base_url}/user/searchUsers`;
-    return this.apiSvc.get(path, body);
+  searchUsers(searchString: string) {
+    const path = `${this.base_url}/user/searchUsers?usernameOrEmail=${searchString}`;
+    return this.apiSvc.get(path);
   }
 }
