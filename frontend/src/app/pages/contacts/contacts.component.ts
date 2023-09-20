@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ContactsService } from 'src/app/services/contacts.service';
 import { SearchformService } from 'src/app/services/forms/searchform.service';
 
 @Component({
@@ -6,8 +7,18 @@ import { SearchformService } from 'src/app/services/forms/searchform.service';
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.scss'],
 })
-export class ContactsComponent {
-  constructor(private searchFormSvc: SearchformService) {}
+export class ContactsComponent implements OnInit {
+  constructor(
+    private searchFormSvc: SearchformService,
+    private contactsSvc: ContactsService
+  ) {}
+
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    this.contactsSvc.checkChatRequests(token).subscribe((res) => {
+      console.log(res);
+    });
+  }
 
   searchedData: any;
 

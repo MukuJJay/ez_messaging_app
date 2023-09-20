@@ -1,4 +1,4 @@
-import UserModel from "../models/User.js";
+import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -11,7 +11,7 @@ export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const existingUsernameChecker = await UserModel.findOne({
+    const existingUsernameChecker = await User.findOne({
       username: username,
     });
 
@@ -19,7 +19,7 @@ export const register = async (req, res) => {
       res.status(500).json({ message: "User Already Exists!" });
     } else {
       const hashedPassword = await hashingPassword(password); //hashing password
-      const createdUser = await UserModel.create({
+      const createdUser = await User.create({
         username: username,
         email: email,
         password: hashedPassword,
@@ -44,7 +44,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await UserModel.findOne({ email: email });
+    const user = await User.findOne({ email: email });
 
     if (!user) res.status(400).json({ message: "User Not Found!" });
 

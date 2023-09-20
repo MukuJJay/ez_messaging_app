@@ -5,9 +5,10 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now() },
-  contacts: { type: Array },
+  contacts: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  chatRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "ChatRequests" }],
 });
 
-const userModel = mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
 
-export default userModel;
+export default User;

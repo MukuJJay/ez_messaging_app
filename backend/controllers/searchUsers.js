@@ -1,11 +1,11 @@
-import userModel from "../models/User.js";
+import User from "../models/User.js";
 
 export const searchUsers = async (req, res) => {
   const usernameOrEmail = req.query.usernameOrEmail;
   const regexp = new RegExp("^" + usernameOrEmail, "i");
 
-  const matchedUsernames = await userModel.find({ username: regexp });
-  const matchedEmails = await userModel.find({ email: regexp });
+  const matchedUsernames = await User.find({ username: regexp });
+  const matchedEmails = await User.find({ email: regexp });
 
   const matchedEnitites = [...matchedUsernames, ...matchedEmails];
 
