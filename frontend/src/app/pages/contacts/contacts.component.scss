@@ -2,7 +2,7 @@
   padding: 50px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 25px;
   align-items: center;
   justify-content: center;
   .search {
@@ -46,12 +46,15 @@
       overflow-y: auto;
       .singleEnitity {
         display: flex;
+        align-items: center;
         gap: 40px;
         background-color: var(--primaryColor);
+        border-radius: 6px;
         padding: 10px;
         cursor: pointer;
         p {
           width: 200px;
+          font-weight: 600;
         }
       }
     }
@@ -82,6 +85,11 @@
       padding: 5px;
       color: var(--tertiaryColor);
       box-shadow: 0 1px 1px 1px var(--darkestPrimaryColor);
+      transition: 200ms;
+      &:hover {
+        transform: translateY(1px);
+        box-shadow: 0 0 0 0 var(--darkestPrimaryColor);
+      }
     }
   }
 }

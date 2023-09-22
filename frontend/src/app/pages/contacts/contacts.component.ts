@@ -14,8 +14,7 @@ export class ContactsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    this.contactsSvc.checkChatRequests(token).subscribe((res) => {
+    this.contactsSvc.checkChatRequests().subscribe((res) => {
       console.log(res);
       this.senderObjs = res.data;
     });
@@ -31,5 +30,12 @@ export class ContactsComponent implements OnInit {
       this.searchedData = res.data;
       console.log(this.searchedData);
     });
+  }
+
+  sendChatReq(receivingUser: any): void {
+    // const payloadObj = { receiverId: receivingUser._id };
+    // this.contactsSvc.sendChatRequest(payloadObj).subscribe((res) => {
+    //   console.log(res);
+    // });
   }
 }

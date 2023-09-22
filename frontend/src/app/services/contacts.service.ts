@@ -10,8 +10,13 @@ export class ContactsService {
 
   base_url = environment.base_url;
 
-  checkChatRequests(token: any) {
-    const path = `${this.base_url}/user/checkChatRequests?token=${token}`;
+  checkChatRequests() {
+    const path = `${this.base_url}/user/checkChatRequests`;
     return this.apiSvc.get(path);
+  }
+
+  sendChatRequest(receivingUserId: any) {
+    const path = `${this.base_url}/user/sendChatRequest`;
+    return this.apiSvc.post(path, receivingUserId);
   }
 }

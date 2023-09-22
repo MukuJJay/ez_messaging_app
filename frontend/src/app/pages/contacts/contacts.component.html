@@ -9,14 +9,18 @@
       (input)="fetchInp($event)"
     />
     <div class="onSearch" *ngIf="searchString">
-      <div class="singleEnitity" *ngFor="let searchedEnitity of searchedData">
-        <p class="text-quaternary color-secondary">
+      <div
+        class="singleEnitity"
+        *ngFor="let searchedEnitity of searchedData"
+        (click)="sendChatReq(searchedEnitity)"
+      >
+        <p class="text-quaternary color-tertiary">
           User Name:
-          <span class="color-danger">{{ searchedEnitity.username }}</span>
+          <span class="color-secondary">{{ searchedEnitity.username }}</span>
         </p>
-        <p class="text-quaternary color-secondary">
+        <p class="text-quaternary color-tertiary">
           Email:
-          <span class="color-danger">{{ searchedEnitity.email }}</span>
+          <span class="color-secondary">{{ searchedEnitity.email }}</span>
         </p>
       </div>
       <p

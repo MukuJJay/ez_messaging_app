@@ -3,7 +3,16 @@ import User from "../models/User.js";
 import ChatRequest from "../models/ChatRequest.js";
 
 export const sendChatRequest = async (req, res) => {
-  const { senderId, receiverId } = req.body;
+  const token = req.headers.authorization.slice(7).trim();
+  let senderId;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    senderId = decoded.id;
+  } catch (err) {
+    res.status(500).json({ message: "Invalid token !!!" });
+  }
+
+  const { receiverId } = req.body;
   const sender = await User.findById(senderId);
   const receiver = await User.findById(receiverId);
 
@@ -42,7 +51,7 @@ export const sendChatRequest = async (req, res) => {
 };
 
 export const checkChatRequests = async (req, res) => {
-  const token = req.query.token;
+  const token = req.headers.authorization.slice(7).trim();
   jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) {
       res.status(500).json({ message: "Invalid Token" });
@@ -55,8 +64,8 @@ export const checkChatRequests = async (req, res) => {
       for (const e of chatRequestIds) {
         const chatRequestObj = await ChatRequest.findById(e);
         if (
-          chatRequestObj.status === "pending" &&
-          !chatRequestObj.sender.equals(userInfo._id)
+          chatRequestObj?.status === "pending" &&
+          !chatRequestObj?.sender.equals(userInfo._id)
         ) {
           const senderUser = await User.findById({
             _id: chatRequestObj.sender,
