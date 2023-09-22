@@ -1,7 +1,45 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import ChatRequest from "../models/ChatRequest.js";
 
-export const sendChatRequest = async (req, res) => {};
+export const sendChatRequest = async (req, res) => {
+  const { senderId, receiverId } = req.body;
+  const sender = await User.findById(senderId);
+  const receiver = await User.findById(receiverId);
+
+  const isChatRequest = await ChatRequest.findOne({
+    sender: sender._id,
+    receiver: receiver._id,
+  });
+
+  if (isChatRequest) {
+    switch (isChatRequest.status) {
+      case "pending":
+        res.status(500).json({ message: "Chat request already sent" });
+        break;
+      case "accepted":
+        res
+          .status(500)
+          .json({ message: "You are already friends! Stop being creepy" });
+    }
+  } else {
+    const chatRequestObj = await ChatRequest.create({
+      sender: sender._id,
+      receiver: receiver._id,
+    });
+    await sender.updateOne({
+      chatRequests: [...sender.chatRequests, chatRequestObj._id],
+    });
+    await receiver.updateOne({
+      chatRequests: [...receiver.chatRequests, chatRequestObj._id],
+    });
+
+    res.status(200).json({
+      message: "Chat request sent successfully!",
+      data: { chatRequestObj },
+    });
+  }
+};
 
 export const checkChatRequests = async (req, res) => {
   const token = req.query.token;
@@ -10,7 +48,23 @@ export const checkChatRequests = async (req, res) => {
       res.status(500).json({ message: "Invalid Token" });
     } else {
       const userInfo = await User.findOne({ _id: decoded.id });
-      res.status(200).json({ data: userInfo.chatRequests });
+
+      const chatRequestIds = userInfo?.chatRequests.map((e) => e);
+      const senderUsers = [];
+
+      for (const e of chatRequestIds) {
+        const chatRequestObj = await ChatRequest.findById(e);
+        if (
+          chatRequestObj.status === "pending" &&
+          !chatRequestObj.sender.equals(userInfo._id)
+        ) {
+          const senderUser = await User.findById({
+            _id: chatRequestObj.sender,
+          }).select("-password");
+          senderUsers.push(senderUser);
+        }
+      }
+      res.status(200).json({ data: senderUsers });
     }
   });
 };

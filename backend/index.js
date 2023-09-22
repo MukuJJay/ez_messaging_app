@@ -26,7 +26,7 @@ db.on("error", (err) => {
   console.log(err);
 });
 
-//middlewares
+//setups express
 app.use(express.json());
 app.use(cors({ origin: true }));
 

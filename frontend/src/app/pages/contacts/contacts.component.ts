@@ -17,10 +17,12 @@ export class ContactsComponent implements OnInit {
     const token = localStorage.getItem('token');
     this.contactsSvc.checkChatRequests(token).subscribe((res) => {
       console.log(res);
+      this.senderObjs = res.data;
     });
   }
 
   searchedData: any;
+  senderObjs: any;
 
   searchString: string = '';
   fetchInp(ev: any): void {

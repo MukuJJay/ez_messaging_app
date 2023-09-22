@@ -27,4 +27,14 @@
       </p>
     </div>
   </div>
+
+  <div class="chat-requests" *ngFor="let senderObj of senderObjs">
+    <p class="text-quaternary">
+      <span>{{ senderObj.username }}</span> sent you a chat request
+    </p>
+    <div class="icons">
+      <i class="fa fa-check fa-lg" aria-hidden="true"></i>
+      <i class="fa fa-times fa-lg" aria-hidden="true"></i>
+    </div>
+  </div>
 </div>

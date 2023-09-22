@@ -1,6 +1,8 @@
 .container {
   padding: 50px;
   display: flex;
+  flex-direction: column;
+  gap: 40px;
   align-items: center;
   justify-content: center;
   .search {
@@ -52,6 +54,34 @@
           width: 200px;
         }
       }
+    }
+  }
+  .chat-requests {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background-color: var(--secondaryColor);
+    box-shadow: 0 5px 5px 5px var(--darkestPrimaryColor);
+    border-radius: 6px;
+    span {
+      font-weight: 600;
+      color: var(--darkestPrimaryColor);
+    }
+    .icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+    i {
+      cursor: pointer;
+      background-color: var(--primaryColor);
+      border-radius: 6px;
+      padding: 5px;
+      color: var(--tertiaryColor);
+      box-shadow: 0 1px 1px 1px var(--darkestPrimaryColor);
     }
   }
 }

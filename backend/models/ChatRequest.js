@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ChatRequestsSchema = new mongoose.Schema({
+const ChatRequestSchema = new mongoose.Schema({
   sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   status: {
@@ -8,8 +8,9 @@ const ChatRequestsSchema = new mongoose.Schema({
     enum: ["pending", "accepted", "rejected"],
     default: "pending",
   },
+  createdAt: { type: Date, default: Date.now },
 });
 
-const ChatRequests = new mongoose.model("ChatRequests", ChatRequestsSchema);
+const ChatRequest = new mongoose.model("ChatRequest", ChatRequestSchema);
 
-export default ChatRequests;
+export default ChatRequest;
