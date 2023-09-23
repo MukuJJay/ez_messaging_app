@@ -31,27 +31,28 @@ export const sendChatRequest = async (req, res) => {
           .status(500)
           .json({ message: "You are already friends! Stop being creepy" });
     }
-  } else {
-    const chatRequestObj = await ChatRequest.create({
-      sender: sender._id,
-      receiver: receiver._id,
-    });
-    await sender.updateOne({
-      chatRequests: [...sender.chatRequests, chatRequestObj._id],
-    });
-    await receiver.updateOne({
-      chatRequests: [...receiver.chatRequests, chatRequestObj._id],
-    });
-
-    res.status(200).json({
-      message: "Chat request sent successfully!",
-      data: { chatRequestObj },
-    });
+    return;
   }
+  const chatRequestObj = await ChatRequest.create({
+    sender: sender._id,
+    receiver: receiver._id,
+  });
+  await sender.updateOne({
+    chatRequests: [...sender.chatRequests, chatRequestObj._id],
+  });
+  await receiver.updateOne({
+    chatRequests: [...receiver.chatRequests, chatRequestObj._id],
+  });
+
+  res.status(200).json({
+    message: "Chat request sent successfully!",
+    data: { chatRequestObj },
+  });
 };
 
 export const checkChatRequests = async (req, res) => {
   const token = req.headers.authorization.slice(7).trim();
+
   jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) {
       res.status(500).json({ message: "Invalid Token" });
