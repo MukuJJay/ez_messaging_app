@@ -56,26 +56,26 @@ export const checkChatRequests = async (req, res) => {
   jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) {
       res.status(500).json({ message: "Invalid Token" });
-    } else {
-      const userInfo = await User.findOne({ _id: decoded.id });
-
-      const chatRequestIds = userInfo?.chatRequests.map((e) => e);
-      const senderUsers = [];
-
-      for (const e of chatRequestIds) {
-        const chatRequestObj = await ChatRequest.findById(e);
-        if (
-          chatRequestObj?.status === "pending" &&
-          !chatRequestObj?.sender.equals(userInfo._id)
-        ) {
-          const senderUser = await User.findById({
-            _id: chatRequestObj.sender,
-          }).select("-password");
-          senderUsers.push(senderUser);
-        }
-      }
-      res.status(200).json({ data: senderUsers });
+      return;
     }
+    const userInfo = await User.findOne({ _id: decoded.id });
+
+    const chatRequestIds = userInfo?.chatRequests.map((e) => e);
+    const senderUsers = [];
+
+    for (const e of chatRequestIds) {
+      const chatRequestObj = await ChatRequest.findById(e);
+      if (
+        chatRequestObj?.status === "pending" &&
+        !chatRequestObj?.sender.equals(userInfo._id)
+      ) {
+        const senderUser = await User.findById({
+          _id: chatRequestObj.sender,
+        }).select("-password");
+        senderUsers.push(senderUser);
+      }
+    }
+    res.status(200).json({ data: senderUsers });
   });
 };
 
