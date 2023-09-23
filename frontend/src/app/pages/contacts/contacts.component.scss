@@ -60,6 +60,7 @@
     }
   }
   .chat-requests {
+    width: 450px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -98,5 +99,8 @@
   input,
   .onSearch {
     width: 100% !important;
+  }
+  .chat-requests {
+    width: 300px !important;
   }
 }

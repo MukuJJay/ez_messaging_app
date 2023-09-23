@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ContactsService } from 'src/app/services/contacts.service';
 import { SearchformService } from 'src/app/services/forms/searchform.service';
+import { ModalServiceService } from 'src/app/services/modal-service.service';
 
 @Component({
   selector: 'app-contacts',
@@ -10,7 +11,8 @@ import { SearchformService } from 'src/app/services/forms/searchform.service';
 export class ContactsComponent implements OnInit {
   constructor(
     private searchFormSvc: SearchformService,
-    private contactsSvc: ContactsService
+    private contactsSvc: ContactsService,
+    private modalSvc: ModalServiceService
   ) {}
 
   ngOnInit(): void {
@@ -32,10 +34,20 @@ export class ContactsComponent implements OnInit {
     });
   }
 
-  sendChatReq(receivingUser: any): void {
-    // const payloadObj = { receiverId: receivingUser._id };
-    // this.contactsSvc.sendChatRequest(payloadObj).subscribe((res) => {
-    //   console.log(res);
-    // });
+  sendChatReq(modalTemplate: TemplateRef<any>, receivingUser: any): void {
+    this.modalSvc
+      .open(modalTemplate, {
+        size: 'lg',
+        tittle: 'Send Friend Request?',
+        submitBtnName: 'Yes',
+      })
+      .subscribe((action: string) => {
+        if (action === 'complete') {
+          const payloadObj = { receiverId: receivingUser._id };
+          this.contactsSvc.sendChatRequest(payloadObj).subscribe((res) => {
+            console.log(res);
+          });
+        }
+      });
   }
 }

@@ -1,0 +1,24 @@
+<div class="modal {{ size }}">
+  <div class="modal-header" *ngIf="tittle">
+    <h3 class="text-tertiary color-secondary">{{ tittle }}</h3>
+    <app-button
+      (click)="close()"
+      [text]="'✕'"
+      class="btn"
+      [type]="'button-74'"
+    ></app-button>
+  </div>
+  <div class="modal-content">
+    <ng-content></ng-content>
+  </div>
+  <div class="modal-footer">
+    <app-button
+      (click)="submit()"
+      [text]="submitBtnName ? submitBtnName : 'Submit'"
+      class="btn"
+      [type]="'button-74'"
+    ></app-button>
+  </div>
+</div>
+
+<div class="modal-backdrop" (click)="close()"></div>

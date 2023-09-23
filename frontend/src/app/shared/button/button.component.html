@@ -4,9 +4,9 @@
   type="{{ typeBtn === true ? 'button' : '' }}"
   [ngStyle]="{ width: width }"
 >
-  {{ text }}<i class="fa fa-{{ icon }} fa-{{ size }}"></i>
+  {{ text }}<i *ngIf="icon" class="fa fa-{{ icon }} fa-{{ size }}"></i>
 </button>
 
 <button *ngIf="disabled" class="disabled" disabled>
-  {{ text }}<i class="fa fa-{{ icon }} fa-{{ size }}"></i>
+  {{ text }}<i *ngIf="icon" class="fa fa-{{ icon }} fa-{{ size }}"></i>
 </button>
