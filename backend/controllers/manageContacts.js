@@ -4,13 +4,7 @@ import ChatRequest from "../models/ChatRequest.js";
 
 export const sendChatRequest = async (req, res) => {
   const token = req.headers.authorization.slice(7).trim();
-  let senderId;
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    senderId = decoded.id;
-  } catch (err) {
-    res.status(500).json({ message: "Invalid token !!!" });
-  }
+  const senderId = jwt.verify(token, process.env.JWT_SECRET).id;
 
   const { receiverId } = req.body;
   const sender = await User.findById(senderId);
@@ -79,4 +73,58 @@ export const checkChatRequests = async (req, res) => {
   });
 };
 
-export const addOrRemoveContactsRequests = async (req, res) => {};
+export const addOrRemoveContactsRequests = async (req, res) => {
+  const { decesion, userWhoSentId } = req.body;
+  const token = req.headers.authorization.slice(7).trim();
+  const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+
+  const user = await User.findById(userId);
+  const userWhoSent = await User.findById(userWhoSentId);
+
+  const commonReqId = findcommonId(
+    user?.chatRequests,
+    userWhoSent?.chatRequests
+  );
+
+  const chatRequestObj = await ChatRequest.findById(commonReqId);
+  // console.log(chatRequestObj, commonReqId);
+  // return;
+  if (
+    decesion &&
+    (chatRequestObj?.status === "pending" ||
+      chatRequestObj?.status === "rejected")
+  ) {
+    await user.updateOne({ contacts: [...user.contacts, userWhoSent._id] });
+    await userWhoSent.updateOne({
+      contacts: [...userWhoSent.contacts, user._id],
+    });
+    await chatRequestObj.updateOne({ status: "accepted" });
+
+    res.status(200).json({
+      message: `${userWhoSent?.username} has been added as a contact`,
+    });
+
+    return;
+  }
+
+  if (!decesion) {
+    await chatRequestObj.updateOne({ status: "rejected" });
+    res.status(200).json({
+      message: `Chat request from ${userWhoSent.username} has been deleted`,
+    });
+
+    return;
+  }
+
+  res
+    .status(400)
+    .json({ message: "You are already friends. Stop being creepy !!!" });
+};
+
+function findcommonId(arr1, arr2) {
+  for (const item of arr1) {
+    for (const elem of arr2) {
+      if (item.equals(elem)) return elem;
+    }
+  }
+}

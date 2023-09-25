@@ -50,4 +50,10 @@ export class ContactsComponent implements OnInit {
         }
       });
   }
+
+  addOrRemoveChatReq(bool: boolean, userWhosent: any): void {
+    this.contactsSvc
+      .acceptOrRemoveChatRequest(bool, userWhosent._id)
+      .subscribe();
+  }
 }

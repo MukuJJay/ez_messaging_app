@@ -19,4 +19,10 @@ export class ContactsService {
     const path = `${this.base_url}/user/sendChatRequest`;
     return this.apiSvc.post(path, receivingUserId);
   }
+
+  acceptOrRemoveChatRequest(decesion: boolean, userWhoSentId: string) {
+    const path = `${this.base_url}/user/addOrRemoveContactsRequests`;
+    const payloadObj = { decesion: decesion, userWhoSentId: userWhoSentId };
+    return this.apiSvc.post(path, payloadObj);
+  }
 }
