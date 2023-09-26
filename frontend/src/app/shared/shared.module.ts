@@ -5,10 +5,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from './button/button.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ModalComponent } from './modal/modal.component';
+import { GridContactsComponent } from './grid-contacts/grid-contacts.component';
 
 @NgModule({
-  declarations: [InputComponent, ButtonComponent, NavbarComponent, ModalComponent],
+  declarations: [
+    InputComponent,
+    ButtonComponent,
+    NavbarComponent,
+    ModalComponent,
+    GridContactsComponent,
+  ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  exports: [InputComponent, ButtonComponent, NavbarComponent],
+  exports: [
+    InputComponent,
+    ButtonComponent,
+    NavbarComponent,
+    GridContactsComponent,
+  ],
 })
 export class SharedModule {}

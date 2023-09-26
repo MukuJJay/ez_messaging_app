@@ -25,4 +25,9 @@ export class ContactsService {
     const payloadObj = { decesion: decesion, userWhoSentId: userWhoSentId };
     return this.apiSvc.post(path, payloadObj);
   }
+
+  getUserInfo() {
+    const path = `${this.base_url}/user/userInfo`;
+    return this.apiSvc.get(path);
+  }
 }

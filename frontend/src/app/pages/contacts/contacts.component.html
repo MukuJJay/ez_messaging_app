@@ -1,10 +1,11 @@
-<div class="container">
+<div class="container-custom">
   <div class="search">
     <label for="search" class="text-secondary color-secondary"
       >Search by Username</label
     >
     <input
       name="search"
+      class="text-quaternary"
       placeholder="Search by typing the username of an user"
       (input)="fetchInp($event)"
     />
@@ -49,6 +50,8 @@
       ></i>
     </div>
   </div>
+
+  <app-grid-contacts [allContacts]="allContacts"></app-grid-contacts>
 </div>
 
 <ng-template #modalTemplate></ng-template>

@@ -1,4 +1,10 @@
-@import "ngx-toastr/toastr";
+//tailwind css
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "ngx-toastr/toastr"; //toaster css
+
 //custom toasts styles
 .toast-success {
   background-color: var(--secondaryColor);

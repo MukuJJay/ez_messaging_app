@@ -16,14 +16,13 @@ export class ContactsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.contactsSvc.checkChatRequests().subscribe((res) => {
-      console.log(res);
-      this.senderObjs = res.data;
-    });
+    this.checkChatRequsts();
+    this.getUserInfo();
   }
 
   searchedData: any;
   senderObjs: any;
+  allContacts: any[] = [];
 
   searchString: string = '';
   fetchInp(ev: any): void {
@@ -32,6 +31,19 @@ export class ContactsComponent implements OnInit {
       this.searchedData = res.data;
       console.log(this.searchedData);
     });
+  }
+
+  checkChatRequsts(): void {
+    this.contactsSvc.checkChatRequests().subscribe((res) => {
+      console.log(res);
+      this.senderObjs = res.data;
+    });
+  }
+
+  getUserInfo(): void {
+    this.contactsSvc
+      .getUserInfo()
+      .subscribe((res) => (this.allContacts = res.contacts));
   }
 
   sendChatReq(modalTemplate: TemplateRef<any>, receivingUser: any): void {
@@ -55,5 +67,7 @@ export class ContactsComponent implements OnInit {
     this.contactsSvc
       .acceptOrRemoveChatRequest(bool, userWhosent._id)
       .subscribe();
+
+    window.location.reload();
   }
 }

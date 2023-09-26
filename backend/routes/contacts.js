@@ -5,6 +5,8 @@ import {
   addOrRemoveContactsRequests,
   checkChatRequests,
 } from "../controllers/manageContacts.js";
+import { getUserInfo } from "../controllers/userInfo.js";
+
 const router = express.Router();
 
 const errorHandler = (req, res, fn) => {
@@ -26,5 +28,6 @@ router.get("/checkChatRequests", (req, res) =>
 router.post("/addOrRemoveContactsRequests", (req, res) =>
   errorHandler(req, res, addOrRemoveContactsRequests)
 );
+router.get("/userInfo", (req, res) => errorHandler(req, res, getUserInfo));
 
 export default router;
