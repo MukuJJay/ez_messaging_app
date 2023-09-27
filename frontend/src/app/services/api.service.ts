@@ -15,4 +15,8 @@ export class ApiService {
   get(path: string) {
     return this.http.get(path) as Observable<any>;
   }
+
+  put(path: string, body: any) {
+    return this.http.put(path, body) as Observable<any>;
+  }
 }

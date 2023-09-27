@@ -2,9 +2,22 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import ChatRequest from "../models/ChatRequest.js";
 
-export const sendChatRequest = async (req, res) => {
+function findcommonId(arr1, arr2) {
+  for (const item of arr1) {
+    for (const elem of arr2) {
+      if (item.equals(elem)) return elem;
+    }
+  }
+}
+
+function getUserId(req) {
   const token = req.headers.authorization.slice(7).trim();
-  const senderId = jwt.verify(token, process.env.JWT_SECRET).id;
+  const id = jwt.verify(token, process.env.JWT_SECRET).id;
+  return id;
+}
+
+export const sendChatRequest = async (req, res) => {
+  const senderId = getUserId(req);
 
   const { receiverId } = req.body;
   const sender = await User.findById(senderId);
@@ -14,6 +27,18 @@ export const sendChatRequest = async (req, res) => {
     sender: sender._id,
     receiver: receiver._id,
   });
+
+  const isReverseChatRequest = await ChatRequest.findOne({
+    sender: receiver._id,
+    receiver: sender._id,
+  });
+
+  if (isReverseChatRequest) {
+    res.status(400).json({
+      message: `${receiver.username} already sent you a chat request`,
+    });
+    return;
+  }
 
   if (isChatRequest) {
     switch (isChatRequest.status) {
@@ -45,38 +70,31 @@ export const sendChatRequest = async (req, res) => {
 };
 
 export const checkChatRequests = async (req, res) => {
-  const token = req.headers.authorization.slice(7).trim();
+  const userId = getUserId(req);
 
-  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-    if (err) {
-      res.status(500).json({ message: "Invalid Token" });
-      return;
+  const userInfo = await User.findOne({ _id: userId });
+
+  const chatRequestIds = userInfo?.chatRequests.map((e) => e);
+  const senderUsers = [];
+
+  for (const e of chatRequestIds) {
+    const chatRequestObj = await ChatRequest.findById(e);
+    if (
+      chatRequestObj?.status === "pending" &&
+      !chatRequestObj?.sender.equals(userInfo._id)
+    ) {
+      const senderUser = await User.findById({
+        _id: chatRequestObj.sender,
+      }).select("-password");
+      senderUsers.push(senderUser);
     }
-    const userInfo = await User.findOne({ _id: decoded.id });
-
-    const chatRequestIds = userInfo?.chatRequests.map((e) => e);
-    const senderUsers = [];
-
-    for (const e of chatRequestIds) {
-      const chatRequestObj = await ChatRequest.findById(e);
-      if (
-        chatRequestObj?.status === "pending" &&
-        !chatRequestObj?.sender.equals(userInfo._id)
-      ) {
-        const senderUser = await User.findById({
-          _id: chatRequestObj.sender,
-        }).select("-password");
-        senderUsers.push(senderUser);
-      }
-    }
-    res.status(200).json({ data: senderUsers });
-  });
+  }
+  res.status(200).json({ data: senderUsers });
 };
 
 export const addOrRemoveContactsRequests = async (req, res) => {
   const { decesion, userWhoSentId } = req.body;
-  const token = req.headers.authorization.slice(7).trim();
-  const userId = jwt.verify(token, process.env.JWT_SECRET).id;
+  const userId = getUserId(req);
 
   const user = await User.findById(userId);
   const userWhoSent = await User.findById(userWhoSentId);
@@ -87,8 +105,7 @@ export const addOrRemoveContactsRequests = async (req, res) => {
   );
 
   const chatRequestObj = await ChatRequest.findById(commonReqId);
-  // console.log(chatRequestObj, commonReqId);
-  // return;
+
   if (
     decesion &&
     (chatRequestObj?.status === "pending" ||
@@ -108,7 +125,20 @@ export const addOrRemoveContactsRequests = async (req, res) => {
   }
 
   if (!decesion) {
-    await chatRequestObj.updateOne({ status: "rejected" });
+    chatRequestObj?.status === "rejected";
+    await chatRequestObj.save();
+    await chatRequestObj.deleteOne({ status: "rejected" });
+
+    user.chatRequests = user.chatRequests.filter(
+      (e) => !e.equals(chatRequestObj._id)
+    );
+    await user.save();
+
+    userWhoSent.chatRequests = userWhoSent.chatRequests.filter(
+      (e) => !e.equals(chatRequestObj._id)
+    );
+    await userWhoSent.save();
+
     res.status(200).json({
       message: `Chat request from ${userWhoSent.username} has been deleted`,
     });
@@ -121,10 +151,36 @@ export const addOrRemoveContactsRequests = async (req, res) => {
     .json({ message: "You are already friends. Stop being creepy !!!" });
 };
 
-function findcommonId(arr1, arr2) {
-  for (const item of arr1) {
-    for (const elem of arr2) {
-      if (item.equals(elem)) return elem;
-    }
+export const removeContacts = async (req, res) => {
+  const userId = getUserId(req);
+
+  const { contactId } = req.body;
+
+  if (!contactId) {
+    res.status(400).json({ message: "No contact_id provided" });
+    return;
   }
-}
+
+  const user = await User.findById(userId);
+  const contact = await User.findById(contactId);
+  const commonChatReqId = findcommonId(user.chatRequests, contact.chatRequests);
+
+  const chatReqObj = await ChatRequest.findById(commonChatReqId);
+
+  user.contacts = user.contacts.filter((e) => !e.equals(contact?._id));
+  user.chatRequests = user.chatRequests.filter(
+    (e) => !e.equals(chatReqObj._id)
+  );
+  contact.contacts = contact.contacts.filter((e) => !e.equals(user?._id));
+  contact.chatRequests = contact.chatRequests.filter(
+    (e) => !e.equals(chatReqObj._id)
+  );
+
+  await ChatRequest.deleteOne({ _id: chatReqObj._id });
+  await user.save();
+  await contact.save();
+
+  res.status(200).json({
+    message: `${contact?.username} deleted from contacts successfully.`,
+  });
+};

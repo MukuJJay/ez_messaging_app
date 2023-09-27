@@ -30,4 +30,10 @@ export class ContactsService {
     const path = `${this.base_url}/user/userInfo`;
     return this.apiSvc.get(path);
   }
+
+  deleteContacts(contactId: string) {
+    const path = `${this.base_url}/user/deleteContacts`;
+    const payloadObj = { contactId: contactId };
+    return this.apiSvc.put(path, payloadObj);
+  }
 }

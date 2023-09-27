@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ContactsService } from 'src/app/services/contacts.service';
 
 @Component({
   selector: 'app-grid-contacts',
@@ -6,5 +7,12 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./grid-contacts.component.scss'],
 })
 export class GridContactsComponent {
+  constructor(private contactsSvc: ContactsService) {}
+
   @Input() allContacts: any[] = [];
+
+  deleteContact(contactId: string): void {
+    this.contactsSvc.deleteContacts(contactId).subscribe();
+    window.location.reload();
+  }
 }

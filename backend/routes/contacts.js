@@ -4,6 +4,7 @@ import {
   sendChatRequest,
   addOrRemoveContactsRequests,
   checkChatRequests,
+  removeContacts,
 } from "../controllers/manageContacts.js";
 import { getUserInfo } from "../controllers/userInfo.js";
 
@@ -29,5 +30,8 @@ router.post("/addOrRemoveContactsRequests", (req, res) =>
   errorHandler(req, res, addOrRemoveContactsRequests)
 );
 router.get("/userInfo", (req, res) => errorHandler(req, res, getUserInfo));
+router.put("/deleteContacts", (req, res) =>
+  errorHandler(req, res, removeContacts)
+);
 
 export default router;
