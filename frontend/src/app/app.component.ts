@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
       --tertiaryColor: #71736c;
       --dangerColor: crimson;
       --darkestPrimaryColor: #121314;
+      --darkestPrimaryColorHover: #12131480;
       --online: green;
     }`;
 

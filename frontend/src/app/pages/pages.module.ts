@@ -5,9 +5,10 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContactsComponent } from './contacts/contacts.component';
+import { MainChatComponent } from './main-chat/main-chat.component';
 
 @NgModule({
-  declarations: [UserAuthComponent, DashboardComponent, ContactsComponent],
+  declarations: [UserAuthComponent, DashboardComponent, ContactsComponent, MainChatComponent],
   imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule],
   exports: [UserAuthComponent],
 })

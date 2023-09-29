@@ -10,12 +10,13 @@
   // inset: 0;
   // z-index: 1000;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 768px) {
     position: fixed;
+    z-index: 10;
     padding: 10px 20px;
     bottom: 0;
     width: 100vw;
-    height: 60px;
+    height: 70px;
     .top-items,
     .bottom-items {
       width: auto;
@@ -52,10 +53,6 @@
 
 .active {
   border: 1px solid var(--secondaryColor);
-  animation: rubberBand !important;
-  animation-duration: 700ms !important;
-}
-.clicked {
   animation: rubberBand !important;
   animation-duration: 700ms !important;
 }

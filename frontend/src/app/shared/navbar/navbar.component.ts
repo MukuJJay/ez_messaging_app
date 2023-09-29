@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   @Output() dashboardVariant = new EventEmitter<string>();
   activeIndex: number = Number(localStorage.getItem('activeNavbarIndex')) || 0;
   isClickedIndex: number = NaN;
+  toggleBtnActive: boolean = false;
 
   setActiveClass(i: number): void {
     this.activeIndex = i;
@@ -42,6 +43,7 @@ export class NavbarComponent implements OnInit {
         break;
       case 'chat':
         this.chat();
+        break;
     }
   }
 
@@ -59,11 +61,8 @@ export class NavbarComponent implements OnInit {
     this.dashboardVariant.emit('chat');
     localStorage.setItem('activeDashboardVariant', 'chat');
   }
-
-  iconClicker(index: number) {
-    this.isClickedIndex = index;
-    setTimeout(() => {
-      this.isClickedIndex = NaN;
-    }, 800);
+  toggleLowerIcons(bool: boolean): void {
+    if (bool) this.dashboardVariant.emit('menubar');
+    else this.toggleBtnActive = bool;
   }
 }

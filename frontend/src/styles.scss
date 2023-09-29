@@ -165,27 +165,22 @@ body {
 
 .text-primary {
   font-family: "Roboto", sans-serif;
-  color: var(--primaryColor);
   font-size: 40px;
 }
 .text-secondary {
   font-family: "Roboto", sans-serif;
-  color: var(--primaryColor);
   font-size: 32px;
 }
 .text-tertiary {
   font-family: "Roboto", sans-serif;
-  color: var(--primaryColor);
   font-size: 22px;
 }
 .text-quaternary {
   font-family: "Roboto", sans-serif;
-  color: var(--primaryColor);
   font-size: 16px;
 }
 .text-quinary {
   font-family: "Roboto", sans-serif;
-  color: var(--primaryColor);
   font-size: 13px;
 }
 
@@ -246,4 +241,10 @@ body {
   border-radius: 50%;
   border: 2px solid white;
   background-color: var(--dangerColor);
+}
+
+@layer components {
+  .active-ts {
+    @apply bg-darkestPrimaryColor transition-all duration-200;
+  }
 }
