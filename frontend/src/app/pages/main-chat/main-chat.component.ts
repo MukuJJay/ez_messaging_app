@@ -17,18 +17,32 @@ export class MainChatComponent implements OnInit {
     this.contactsSvc.getUserInfo().subscribe((res) => {
       this.allContacts = res.contacts;
     });
+
+    //setting localContact value
+    const localContact = localStorage.getItem('selectedContact');
+    this.selectedContact = JSON.parse(localContact ? localContact : '');
   }
 
   setActiveIndex(contact: any): void {
     this.selectedContact = contact;
+    localStorage.setItem(
+      'selectedContact',
+      JSON.stringify(this.selectedContact)
+    );
   }
 
-  // mainChatWindowSwitcher():void{
-
-  // }
+  clearSelectedContact(): void {
+    this.selectedContact = null;
+    localStorage.removeItem('selectedContact');
+  }
 
   fetchingTypedMessage(): void {
     console.log(this.typedMessage);
     this.typedMessage = '';
+  }
+
+  compareLogic(contact: any) {
+    // const result = this.selectedContact.equals(contact);
+    return true;
   }
 }

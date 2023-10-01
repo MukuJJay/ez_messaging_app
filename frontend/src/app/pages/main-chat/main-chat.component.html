@@ -1,6 +1,7 @@
 <div class="flex">
+  <!-- contacts and groups section  -->
   <section
-    class="h-screen bg-primaryColor border-r-2 border-tertiaryColor shadow-md shadow-darkestPrimaryColor flex flex-col items-center relative w-2/6 md:w-full"
+    class="h-screen bg-primaryColor border-x border-secondaryColor border-solid flex flex-col items-center relative w-2/6 md:w-full"
   >
     <div
       *ngFor="let contact of allContacts; let i = index"
@@ -14,6 +15,7 @@
     </div>
   </section>
 
+  <!-- desktop if nothing from prev section is selected  -->
   <section
     class="w-4/6 relative md:hidden flex justify-center items-center px-10"
     *ngIf="!selectedContact"
@@ -23,20 +25,34 @@
     </h2>
   </section>
 
-  <section class="w-4/6 relative md:hidden" *ngIf="selectedContact">
+  <!-- main chat section  -->
+  <section
+    class="w-4/6 relative md:w-screen md:h-screen md:fixed md:z-50 bg-primaryColor"
+    *ngIf="selectedContact"
+  >
+    <!-- header  -->
     <div
-      class="w-full h-16 bg-darkestPrimaryColor flex justify-between items-center px-4 border-l border-secondaryColor border-solid"
+      class="w-full h-16 bg-darkestPrimaryColor flex justify-between items-center px-4"
     >
-      <h4 class="text-tertiary text-secondaryColor">
-        {{ selectedContact.username }}
-      </h4>
+      <div class="flex justify-center items-center gap-3">
+        <button
+          type="button"
+          (click)="clearSelectedContact()"
+          class="w-10 h-10 bg-secondaryColor rounded-full mdm:hidden"
+        >
+          <i class="fa fa-lg fa-arrow-left" aria-hidden="true"></i>
+        </button>
+        <h4 class="text-tertiary text-secondaryColor">
+          {{ selectedContact.username }}
+        </h4>
+      </div>
     </div>
 
+    <!-- body  -->
     <div class="w-full"></div>
 
-    <div
-      class="absolute z-10 bottom-0 w-full border-l border-secondaryColor border-solid"
-    >
+    <!-- footer  -->
+    <div class="absolute z-10 bottom-0 w-full">
       <textarea
         rows="4"
         name="message"
