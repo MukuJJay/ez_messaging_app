@@ -6,9 +6,11 @@
     <div
       *ngFor="let contact of allContacts; let i = index"
       class="w-full h-20 border-b-2 border-darkestPrimaryColor border-solid flex p-4 cursor-pointer transition-all duration-300 {{
-        selectedContact !== contact ? 'hover:bg-darkestPrimaryColorHover' : ''
+        selectedContact.username !== contact.username
+          ? 'hover:bg-darkestPrimaryColorHover'
+          : ''
       }}"
-      [class.active-ts]="selectedContact === contact"
+      [class.active-ts]="selectedContact.username === contact.username"
       (click)="setActiveIndex(contact)"
     >
       <p class="text-quaternary text-secondaryColor">{{ contact.username }}</p>

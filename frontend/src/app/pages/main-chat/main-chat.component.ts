@@ -40,9 +40,4 @@ export class MainChatComponent implements OnInit {
     console.log(this.typedMessage);
     this.typedMessage = '';
   }
-
-  compareLogic(contact: any) {
-    // const result = this.selectedContact.equals(contact);
-    return true;
-  }
 }
