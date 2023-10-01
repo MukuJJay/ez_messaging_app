@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthFormService } from './services/forms/auth-form.service';
 import { Router } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private authFormSvc: AuthFormService, private router: Router) {}
+  constructor(
+    private authFormSvc: AuthFormService,
+    private router: Router,
+    private socket: Socket
+  ) {}
 
   ngOnInit() {
     document.getElementsByTagName('style')[0].innerHTML = `* {
@@ -24,6 +29,13 @@ export class AppComponent implements OnInit {
     const token = localStorage.getItem('token');
     this.addingTokenToHeader(token);
     this.forceRoutingToAuth(token);
+
+    this.sendMessage('Jotaro is the most badass character ever');
+  }
+
+  sendMessage(msg: string) {
+    this.socket.connect();
+    this.socket.emit('chatMsg', msg);
   }
 
   title: string = 'ez_messaging';

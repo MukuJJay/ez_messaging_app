@@ -21,6 +21,7 @@
     "@prisma/client": "^5.2.0",
     "animate.css": "^4.1.1",
     "font-awesome": "^4.7.0",
+    "ngx-socket-io": "^4.5.1",
     "ngx-toastr": "^17.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

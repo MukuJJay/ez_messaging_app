@@ -8,7 +8,8 @@ import { ContactsService } from 'src/app/services/contacts.service';
 })
 export class MainChatComponent implements OnInit {
   allContacts: any[] = [];
-  activeIndex: number = 0;
+  selectedContact: any;
+  typedMessage: string = '';
 
   constructor(private contactsSvc: ContactsService) {}
 
@@ -18,7 +19,16 @@ export class MainChatComponent implements OnInit {
     });
   }
 
-  setActiveIndex(index: number) {
-    this.activeIndex = index;
+  setActiveIndex(contact: any): void {
+    this.selectedContact = contact;
+  }
+
+  // mainChatWindowSwitcher():void{
+
+  // }
+
+  fetchingTypedMessage(): void {
+    console.log(this.typedMessage);
+    this.typedMessage = '';
   }
 }

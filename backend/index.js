@@ -2,13 +2,21 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import ws from "ws";
+import { Server } from "socket.io";
+import { createServer } from "node:http";
 import userAuthRoutes from "./routes/userAuth.js";
-import users from "./routes/contacts.js";
+import contacts from "./routes/contacts.js";
+import message from "./routes/message.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
 const app = express();
+const server = createServer(app);
+
+//io
+export const io = new Server(server, {
+  cors: { origin: "*" },
+});
 
 //db setup
 mongoose.connect(process.env.MONGODB_URI, {
@@ -28,12 +36,13 @@ db.on("error", (err) => {
 
 //setups express
 app.use(express.json());
-app.use(cors({ origin: true }));
+app.use(cors());
 
 app.use("/auth", userAuthRoutes);
-app.use("/user", users);
+app.use("/user", contacts);
+app.use("/message", message);
 
 //server
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Listening on port number ${PORT}`);
 });

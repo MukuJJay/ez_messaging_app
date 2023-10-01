@@ -9,6 +9,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { ApiInterceptor } from './services/interceptors/api.interceptor';
 import { SharedModule } from './shared/shared.module';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +22,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     SharedModule,
     ToastrModule.forRoot({ preventDuplicates: true }),
+    SocketIoModule.forRoot(config),
   ],
   providers: [
     {
