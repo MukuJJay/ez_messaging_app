@@ -7,16 +7,12 @@ import { createServer } from "node:http";
 import userAuthRoutes from "./routes/userAuth.js";
 import contacts from "./routes/contacts.js";
 import message from "./routes/message.js";
+import { sendMessage } from "./controllers/sendMessage.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
 const app = express();
 const server = createServer(app);
-
-//io
-export const io = new Server(server, {
-  cors: { origin: "*" },
-});
 
 //db setup
 mongoose.connect(process.env.MONGODB_URI, {
@@ -41,6 +37,21 @@ app.use(cors());
 app.use("/auth", userAuthRoutes);
 app.use("/user", contacts);
 app.use("/message", message);
+
+//io
+export const io = new Server(server, {
+  cors: { origin: "*" },
+});
+
+io.on("connection", (socket) => {
+  console.log("socket connected");
+  socket.on("disconnect", () => {
+    console.log("socket disconnected");
+  });
+  socket.on("chatMsg", (data) => {
+    sendMessage(socket, data);
+  });
+});
 
 //server
 server.listen(PORT, () => {
