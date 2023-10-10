@@ -8,7 +8,7 @@ export const sendMessage = async (socket, { msg, senderId, receiverId }) => {
   const senderIdObj = new ObjectId(senderId);
   const receiverIdObj = new ObjectId(receiverId);
 
-  const message = Message.create({ msg });
+  const message = await Message.create({ msg });
 
   await Conversation.create({
     senderId: senderIdObj,
@@ -16,10 +16,21 @@ export const sendMessage = async (socket, { msg, senderId, receiverId }) => {
     messageId: message._id,
   });
 
-  const allConvo = await Conversation.find({
-    senderId: senderIdObj || receiverIdObj,
-    receiverId: receiverIdObj || senderIdObj,
+  let allConvo = await Conversation.find({
+    $or: [
+      { senderId: senderIdObj, receiverId: receiverIdObj },
+      { senderId: receiverIdObj, receiverId: senderIdObj },
+    ],
   });
+
+  allConvo = await Promise.all(
+    allConvo.map(async (e) => {
+      const messageForSingleConvo = await Message.findById(e.messageId);
+      const newObj = { ...e, msgObj: messageForSingleConvo };
+
+      return newObj;
+    })
+  );
 
   socket.emit("allConvo", allConvo);
 };

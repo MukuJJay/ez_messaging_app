@@ -14,9 +14,11 @@ export const getUserInfo = async (req, res) => {
 
   const contacts = [];
 
-  for (const item of user.contacts) {
-    const contact = await User.findById(item).select("-password");
-    contacts.push(contact);
+  if (user) {
+    for (const item of user.contacts) {
+      const contact = await User.findById(item).select("-password");
+      contacts.push(contact);
+    }
   }
 
   res.status(200).json({ data: user, contacts: contacts });

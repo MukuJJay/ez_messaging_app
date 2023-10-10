@@ -48,9 +48,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('activeDashboardVariant');
-    localStorage.removeItem('activeNavbarIndex');
+    localStorage.clear();
     location.reload();
   }
   contacts() {
