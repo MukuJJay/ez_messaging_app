@@ -16,10 +16,11 @@ export const sendMessage = async (socket, { msg, senderId, receiverId }) => {
     messageId: message._id,
   });
 
-  const allConvo = Conversation.find({
+  const allConvo = await Conversation.find({
     senderId: senderIdObj || receiverIdObj,
     receiverId: receiverIdObj || senderIdObj,
   });
+
   socket.emit("allConvo", allConvo);
 };
 

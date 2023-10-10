@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +17,8 @@ export class MessageSocketService {
     });
   }
 
-  allConvo(): void {
+  updateAllConvo(): Observable<any> {
     this.socket.connect();
-    this.socket.on('allConvo', (allConvo: any) => {
-      console.log(allConvo);
-    });
+    return this.socket.fromEvent('allConvo');
   }
 }

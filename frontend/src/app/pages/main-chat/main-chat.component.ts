@@ -12,6 +12,7 @@ export class MainChatComponent implements OnInit {
   userData: any;
   selectedContact: any;
   typedMessage: string = '';
+  allConvo: any[] = [];
 
   constructor(
     private contactsSvc: ContactsService,
@@ -51,6 +52,11 @@ export class MainChatComponent implements OnInit {
       this.selectedContact._id
     );
     this.typedMessage = '';
-    this.messageSocketSvc.allConvo();
+
+    // updating all convos
+    this.messageSocketSvc.updateAllConvo().subscribe((res: any) => {
+      this.allConvo = res;
+      console.log(this.allConvo);
+    });
   }
 }

@@ -51,7 +51,9 @@
     </div>
 
     <!-- body  -->
-    <div class="w-full"></div>
+    <ul class="w-full">
+      <li *ngFor="let convo of allConvo">{{ convo.msg }}</li>
+    </ul>
 
     <!-- footer  -->
     <div class="absolute z-10 bottom-0 w-full">
