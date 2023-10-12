@@ -1,11 +1,13 @@
 import express from "express";
-import { sendMessage } from "../controllers/sendMessage.js";
+import { receiveMessage } from "../controllers/send-receiveMessage.js";
 const router = express.Router();
 
 const errorHandler = (req, res, fn) => {
   fn(req, res);
 };
 
-router.post("/sendMessage", (req, res) => errorHandler(req, res, sendMessage));
+router.get("/receiveMessage", (req, res) =>
+  errorHandler(req, res, receiveMessage)
+);
 
 export default router;

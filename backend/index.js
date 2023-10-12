@@ -7,7 +7,7 @@ import { createServer } from "node:http";
 import userAuthRoutes from "./routes/userAuth.js";
 import contacts from "./routes/contacts.js";
 import message from "./routes/message.js";
-import { sendMessage } from "./controllers/sendMessage.js";
+import { sendMessage } from "./controllers/send-receiveMessage.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
     console.log("socket disconnected");
   });
   socket.on("chatMsg", (data) => {
-    sendMessage(socket, data);
+    sendMessage(io, socket, data);
   });
 });
 
