@@ -6,7 +6,7 @@ const errorHandler = (req, res, fn) => {
   fn(req, res);
 };
 
-router.get("/receiveMessage", (req, res) =>
+router.post("/receiveMessage", (req, res) =>
   errorHandler(req, res, receiveMessage)
 );
 

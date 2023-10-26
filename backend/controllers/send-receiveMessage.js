@@ -28,13 +28,13 @@ export const sendMessage = async (
     ],
   }).populate("messageId");
 
-  io.to(receiverId).emit("allConvo", allConvo);
+  io.emit("allConvo", allConvo);
 };
 
 export const receiveMessage = async (req, res) => {
   const token = req.headers.authorization.slice(7).trim();
   const userId = jwt.verify(token, process.env.JWT_SECRET).id;
-  const receiverId = req.query.receiverId;
+  const receiverId = req.body.receiverId;
   const allConvo = await Conversation.find({
     $or: [
       { senderId: userId, receiverId: receiverId },

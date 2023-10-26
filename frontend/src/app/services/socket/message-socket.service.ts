@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
+import { environment } from 'src/app/environments/environment';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MessageSocketService {
-  constructor(private socket: Socket) {}
+  base_url = environment.base_url;
+
+  constructor(private socket: Socket, private apiSvc: ApiService) {}
 
   sendMessage(msg: string, senderId: string, receiverId: string): void {
     this.socket.connect();
@@ -17,8 +21,13 @@ export class MessageSocketService {
     });
   }
 
-  updateAllConvo(): Observable<any> {
-    this.socket.connect();
-    return this.socket.fromEvent('allConvo');
+  listenMessage(eventName: string, callBack: any) {
+    this.socket.on(eventName, callBack);
+  }
+
+  receiveMessage(receiverId: string) {
+    const path = `${this.base_url}/message/receiveMessage`;
+    const payloadObj = { receiverId: receiverId };
+    return this.apiSvc.post(path, payloadObj);
   }
 }

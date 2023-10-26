@@ -49,6 +49,7 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     localStorage.clear();
+    sessionStorage.clear();
     location.reload();
   }
   contacts() {

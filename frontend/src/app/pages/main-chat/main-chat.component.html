@@ -13,7 +13,9 @@
       [class.active-ts]="selectedContact?.username === contact?.username"
       (click)="setActiveIndex(contact)"
     >
-      <p class="text-quaternary text-secondaryColor">{{ contact.username }}</p>
+      <p class="text-quaternary text-secondaryColor font-bold">
+        {{ contact.username }}
+      </p>
     </div>
   </section>
 
@@ -29,12 +31,12 @@
 
   <!-- main chat section  -->
   <section
-    class="w-4/6 relative md:w-screen md:h-screen md:fixed md:z-50 bg-primaryColor"
+    class="w-4/6 relative md:w-screen h-screen md:fixed md:z-50 bg-primaryColor"
     *ngIf="selectedContact"
   >
     <!-- header  -->
     <div
-      class="w-full h-16 bg-darkestPrimaryColor flex justify-between items-center px-4"
+      class="w-full bg-darkestPrimaryColor flex justify-between items-center px-4 h-[10%]"
     >
       <div class="flex justify-center items-center gap-3">
         <button
@@ -44,30 +46,42 @@
         >
           <i class="fa fa-lg fa-arrow-left" aria-hidden="true"></i>
         </button>
-        <h4 class="text-tertiary text-secondaryColor">
+        <h4 class="text-tertiary text-secondaryColor font-bold">
           {{ selectedContact.username }}
         </h4>
       </div>
     </div>
 
     <!-- body  -->
-    <ul class="w-full">
-      <li *ngFor="let convo of allConvo">{{ convo.msg }}</li>
+    <ul #chatroom class="w-full overflow-y-auto h-[75%]">
+      <li
+        *ngFor="let convo of allConvo"
+        class="text-quinary text-white my-2"
+        [class.sentMsg]="
+          selectedContact._id.toString() !== convo.senderId.toString()
+        "
+        [class.receiveMsg]="
+          selectedContact._id.toString() === convo.senderId.toString()
+        "
+      >
+        <span>{{ convo.messageId.msg }}</span>
+      </li>
     </ul>
 
     <!-- footer  -->
-    <div class="absolute z-10 bottom-0 w-full">
+    <div class="relative w-full h-[15%]">
       <textarea
         rows="4"
         name="message"
-        class="bg-darkestPrimaryColor w-full p-4 text-quaternary text-white focus:outline-none resize-none"
+        class="bg-darkestPrimaryColor w-full p-4 text-quaternary text-white focus:outline-none resize-none h-[95%]"
         placeholder="Press enter to send your message"
         [(ngModel)]="typedMessage"
       ></textarea>
       <button
         type="button"
         (click)="fetchingTypedMessage()"
-        class="absolute top-[-15px] right-5 w-12 h-12 bg-secondaryColor rounded-full"
+        class="absolute top-[-15px] right-5 w-12 h-12 bg-secondaryColor rounded-full disabled:opacity-50"
+        [disabled]="isSendBtnDisabled()"
       >
         <i class="fa fa-lg fa-paper-plane" aria-hidden="true"></i>
       </button>
