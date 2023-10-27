@@ -64,23 +64,23 @@
           selectedContact._id.toString() === convo.senderId.toString()
         "
       >
-        <span>{{ convo.messageId.msg }}</span>
+        <span class="max-w-[80%] break-words">{{ convo.messageId.msg }}</span>
       </li>
     </ul>
 
     <!-- footer  -->
-    <div class="relative w-full h-[15%]">
+    <div class="relative w-full h-[15%] flex items-center justify-evenly">
       <textarea
         rows="4"
         name="message"
-        class="bg-darkestPrimaryColor w-full p-4 text-quaternary text-white focus:outline-none resize-none h-[95%]"
+        class="bg-darkestPrimaryColor p-4 text-quaternary text-white focus:outline-none resize-none h-[85%] w-[85%] rounded-lg"
         placeholder="Press enter to send your message"
         [(ngModel)]="typedMessage"
       ></textarea>
       <button
         type="button"
         (click)="fetchingTypedMessage()"
-        class="absolute top-[-15px] right-5 w-12 h-12 bg-secondaryColor rounded-full disabled:opacity-50"
+        class="w-12 h-12 bg-secondaryColor rounded-full disabled:opacity-50"
         [disabled]="isSendBtnDisabled()"
       >
         <i class="fa fa-lg fa-paper-plane" aria-hidden="true"></i>

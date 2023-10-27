@@ -1,11 +1,14 @@
-<div class="container-custom">
-  <app-navbar (dashboardVariant)="switchVariant($event)"></app-navbar>
+<div class="container-custom w-screen h-screen">
+  <app-navbar
+    (dashboardVariant)="switchVariant($event)"
+    class="w-1/12 md:w-0"
+  ></app-navbar>
   <app-main-chat
-    class="w-full"
+    class="w-11/12 md:w-screen"
     *ngIf="dashboardVariant === 'chat'"
   ></app-main-chat>
   <app-contacts
-    class="contacts"
+    class="contacts w-11/12 md:w-screen"
     *ngIf="dashboardVariant === 'contacts'"
   ></app-contacts>
 </div>
