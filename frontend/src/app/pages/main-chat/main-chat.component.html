@@ -64,12 +64,16 @@
           selectedContact._id.toString() === convo.senderId.toString()
         "
       >
-        <span class="max-w-[80%] break-words">{{ convo.messageId.msg }}</span>
+        <span class="max-w-[80%] break-words">{{
+          convo.message_details.msg
+        }}</span>
       </li>
     </ul>
 
     <!-- footer  -->
-    <div class="relative w-full h-[15%] flex items-center justify-evenly">
+    <div
+      class="relative w-full h-[15%] flex items-center justify-between gap-2 px-2"
+    >
       <textarea
         rows="4"
         name="message"
@@ -80,7 +84,7 @@
       <button
         type="button"
         (click)="fetchingTypedMessage()"
-        class="w-[15%] h-[80%] bg-secondaryColor rounded-full disabled:opacity-50"
+        class="w-[15%] h-[60%] bg-secondaryColor rounded-full disabled:opacity-50"
         [disabled]="isSendBtnDisabled()"
       >
         <i class="fa fa-lg fa-paper-plane" aria-hidden="true"></i>
