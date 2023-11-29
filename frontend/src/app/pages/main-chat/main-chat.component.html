@@ -74,17 +74,51 @@
     <div
       class="relative w-full h-[15%] flex items-center justify-between gap-2 px-2"
     >
+      <div class="w-[10%] text-center">
+        <button
+          class="!text-2xl bg-darkestPrimaryColor !p-2 rounded-full sm:!p-1 sm:!text-lg"
+          (click)="emojiBtnFn()"
+        >
+          {{ selectedEmoji }}
+        </button>
+      </div>
       <textarea
-        rows="4"
+        rows="1"
         name="message"
-        class="bg-darkestPrimaryColor p-4 text-quaternary text-white focus:outline-none resize-none h-[85%] w-[85%] rounded-lg"
+        class="bg-darkestPrimaryColor p-4 text-quaternary text-white focus:outline-none resize-none h-[50%] w-[80%] rounded-lg"
         placeholder="Press enter to send your message"
         [(ngModel)]="typedMessage"
       ></textarea>
+      <div *ngIf="isEmojiMartOpen" class="absolute bottom-0 right-0">
+        <emoji-mart
+          title="Pick your emoji…"
+          emoji="point_up"
+          (emojiSelect)="handleEmojiSelection($event)"
+          [isNative]="true"
+          [style]="{
+            position: 'absolute',
+            bottom: '100px',
+            right: '20px',
+            zIndex: '1000'
+          }"
+        ></emoji-mart>
+      </div>
+
+      <!-- <emoji-mart set="google"></emoji-mart>
+      <emoji-mart (emojiClick)="handleEmojiSelection($event)"></emoji-mart>
+      <emoji-mart
+        [style]="{ position: 'absolute', bottom: '20px', right: '20px' }"
+      ></emoji-mart>
+      <emoji-mart
+        [i18n]="{
+          search: 'Recherche',
+          categories: { search: 'Résultats de recherche', recent: 'Récents' }
+        }"
+      ></emoji-mart> -->
       <button
         type="button"
         (click)="fetchingTypedMessage()"
-        class="w-[15%] h-[60%] bg-secondaryColor rounded-full disabled:opacity-50"
+        class="w-[10%] h-[40%] bg-secondaryColor rounded-full disabled:opacity-50"
         [disabled]="isSendBtnDisabled()"
       >
         <i class="fa fa-lg fa-paper-plane" aria-hidden="true"></i>

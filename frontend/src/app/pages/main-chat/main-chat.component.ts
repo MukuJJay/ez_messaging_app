@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ContactsService } from 'src/app/services/contacts.service';
 import { MessageSocketService } from 'src/app/services/socket/message-socket.service';
 
@@ -19,6 +20,8 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
   selectedContact: any;
   typedMessage: string = '';
   allConvo: any[] = [];
+  isEmojiMartOpen: boolean = false;
+  selectedEmoji: EmojiData['native'] = '😘';
   @ViewChild('chatroom') chatroom!: ElementRef;
 
   constructor(
@@ -97,5 +100,15 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
   isSendBtnDisabled(): boolean {
     const regex = /^\s*$/;
     return regex.test(this.typedMessage);
+  }
+
+  handleEmojiSelection(ev: { emoji: EmojiData }): void {
+    console.log(ev.emoji.native);
+    this.selectedEmoji = ev.emoji.native;
+    this.typedMessage = this.typedMessage + this.selectedEmoji;
+  }
+
+  emojiBtnFn(): void {
+    this.isEmojiMartOpen = !this.isEmojiMartOpen;
   }
 }

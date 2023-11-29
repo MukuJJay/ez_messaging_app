@@ -3,7 +3,11 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import "ngx-toastr/toastr"; //toaster css
+//toaster css
+@import "ngx-toastr/toastr";
+
+//emoji picker css
+@import "@ctrl/ngx-emoji-mart/picker";
 
 //custom toasts styles
 .toast-success {

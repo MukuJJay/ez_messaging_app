@@ -6,10 +6,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { MainChatComponent } from './main-chat/main-chat.component';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
-  declarations: [UserAuthComponent, DashboardComponent, ContactsComponent, MainChatComponent],
-  imports: [CommonModule, SharedModule, FormsModule, ReactiveFormsModule],
+  declarations: [
+    UserAuthComponent,
+    DashboardComponent,
+    ContactsComponent,
+    MainChatComponent,
+  ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PickerComponent,
+  ],
   exports: [UserAuthComponent],
 })
 export class PagesModule {}
