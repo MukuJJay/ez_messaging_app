@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ContactsService } from 'src/app/services/contacts.service';
 import { MessageSocketService } from 'src/app/services/socket/message-socket.service';
 
@@ -7,13 +13,13 @@ import { MessageSocketService } from 'src/app/services/socket/message-socket.ser
   templateUrl: './main-chat.component.html',
   styleUrls: ['./main-chat.component.scss'],
 })
-export class MainChatComponent implements OnInit {
+export class MainChatComponent implements OnInit, AfterViewChecked {
   allContacts: any[] = [];
   userData: any;
   selectedContact: any;
   typedMessage: string = '';
   allConvo: any[] = [];
-  @ViewChild('chatroom', { static: false }) chatroom: any;
+  @ViewChild('chatroom') chatroom!: ElementRef;
 
   constructor(
     private contactsSvc: ContactsService,
@@ -22,19 +28,30 @@ export class MainChatComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFn();
-
     //setting localContact value
     const localContact = sessionStorage.getItem('selectedContact');
     if (localContact) {
       this.selectedContact = JSON.parse(localContact ? localContact : '');
-      this.receivedMessages(this.selectedContact);
+      this.receivedMessages(this.selectedContact._id);
     }
-
     //listen socket for messages
     this.messageSocketSvc.listenMessage('allConvo', (data: any) => {
       console.log(data, 'DATA');
       this.allConvo = data;
     });
+  }
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      const element = this.chatroom.nativeElement;
+      element.scrollTop = element.scrollHeight;
+    } catch (error) {
+      console.error('Error scrolling to bottom:', error);
+    }
   }
 
   initFn(): void {
@@ -52,6 +69,7 @@ export class MainChatComponent implements OnInit {
     );
 
     //calling the receive messges api
+
     this.receivedMessages(this.selectedContact._id);
   }
 

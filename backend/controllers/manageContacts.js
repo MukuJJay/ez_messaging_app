@@ -10,14 +10,14 @@ function findcommonId(arr1, arr2) {
   }
 }
 
-function getUserId(req) {
+function handleToken(req) {
   const token = req.headers.authorization.slice(7).trim();
   const id = jwt.verify(token, process.env.JWT_SECRET).id;
   return id;
 }
 
 export const sendChatRequest = async (req, res) => {
-  const senderId = getUserId(req);
+  const senderId = handleToken(req);
 
   const { receiverId } = req.body;
   const sender = await User.findById(senderId);
@@ -70,7 +70,7 @@ export const sendChatRequest = async (req, res) => {
 };
 
 export const checkChatRequests = async (req, res) => {
-  const userId = getUserId(req);
+  const userId = handleToken(req);
 
   const userInfo = await User.findOne({ _id: userId });
 
@@ -94,7 +94,7 @@ export const checkChatRequests = async (req, res) => {
 
 export const addOrRemoveContactsRequests = async (req, res) => {
   const { decesion, userWhoSentId } = req.body;
-  const userId = getUserId(req);
+  const userId = handleToken(req);
 
   const user = await User.findById(userId);
   const userWhoSent = await User.findById(userWhoSentId);
@@ -152,7 +152,7 @@ export const addOrRemoveContactsRequests = async (req, res) => {
 };
 
 export const removeContacts = async (req, res) => {
-  const userId = getUserId(req);
+  const userId = handleToken(req);
 
   const { contactId } = req.body;
 

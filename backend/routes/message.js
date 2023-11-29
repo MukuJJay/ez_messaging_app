@@ -3,7 +3,15 @@ import { receiveMessage } from "../controllers/send-receiveMessage.js";
 const router = express.Router();
 
 const errorHandler = (req, res, fn) => {
-  fn(req, res);
+  try {
+    fn(req, res);
+  } catch {
+    return {
+      status: 201,
+      data: [],
+      message: "Issue loading messages!",
+    };
+  }
 };
 
 router.post("/receiveMessage", (req, res) =>
