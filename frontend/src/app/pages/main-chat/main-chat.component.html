@@ -56,7 +56,7 @@
     <ul #chatroom class="w-full overflow-y-auto h-[75%]">
       <li
         *ngFor="let convo of allConvo"
-        class="text-quinary text-white my-2"
+        class="text-white my-2"
         [class.sentMsg]="
           selectedContact._id.toString() !== convo.senderId.toString()
         "
@@ -64,9 +64,14 @@
           selectedContact._id.toString() === convo.senderId.toString()
         "
       >
-        <span class="max-w-[80%] break-words">{{
-          convo.message_details.msg
-        }}</span>
+        <span
+          class="max-w-[80%] break-words text-quaternary text-msg relative leading-5"
+          >{{ convo.message_details.msg }}
+          <span
+            class="text-[11px] text-gray-200 italic absolute bottom-[5px] right-[10px]"
+            >{{ convo.message_details.createdAt | date : "HH:mm" }}</span
+          >
+        </span>
       </li>
     </ul>
 
@@ -86,13 +91,16 @@
         rows="1"
         name="message"
         class="bg-darkestPrimaryColor p-4 text-quaternary text-white focus:outline-none resize-none h-[50%] w-[80%] rounded-lg"
+        (keydown.enter)="fetchingTypedMessage($event)"
         placeholder="Press enter to send your message"
         [(ngModel)]="typedMessage"
+        maxlength="4096"
       ></textarea>
       <div *ngIf="isEmojiMartOpen" class="absolute bottom-0 right-0">
         <emoji-mart
           title="Pick your emoji…"
           emoji="point_up"
+          [emojiSize]="20"
           (emojiSelect)="handleEmojiSelection($event)"
           [isNative]="true"
           [style]="{
@@ -103,18 +111,6 @@
           }"
         ></emoji-mart>
       </div>
-
-      <!-- <emoji-mart set="google"></emoji-mart>
-      <emoji-mart (emojiClick)="handleEmojiSelection($event)"></emoji-mart>
-      <emoji-mart
-        [style]="{ position: 'absolute', bottom: '20px', right: '20px' }"
-      ></emoji-mart>
-      <emoji-mart
-        [i18n]="{
-          search: 'Recherche',
-          categories: { search: 'Résultats de recherche', recent: 'Récents' }
-        }"
-      ></emoji-mart> -->
       <button
         type="button"
         (click)="fetchingTypedMessage()"

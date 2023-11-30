@@ -21,6 +21,8 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
   typedMessage: string = '';
   allConvo: any[] = [];
   isEmojiMartOpen: boolean = false;
+  regexSendMsg: RegExp = /^\s*$/;
+
   selectedEmoji: EmojiData['native'] = '😘';
   @ViewChild('chatroom') chatroom!: ElementRef;
 
@@ -48,6 +50,13 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
     this.scrollToBottom();
   }
 
+  initFn(): void {
+    this.contactsSvc.getUserInfo().subscribe((res) => {
+      this.allContacts = res.contacts;
+      this.userData = res.data;
+    });
+  }
+
   scrollToBottom(): void {
     try {
       const element = this.chatroom.nativeElement;
@@ -55,13 +64,6 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
     } catch (error) {
       console.error('Error scrolling to bottom:', error);
     }
-  }
-
-  initFn(): void {
-    this.contactsSvc.getUserInfo().subscribe((res) => {
-      this.allContacts = res.contacts;
-      this.userData = res.data;
-    });
   }
 
   setActiveIndex(contact: any): void {
@@ -88,23 +90,26 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
     sessionStorage.removeItem('selectedContact');
   }
 
-  fetchingTypedMessage(): void {
-    this.messageSocketSvc.sendMessage(
-      this.typedMessage.trim(),
-      this.userData._id,
-      this.selectedContact._id
-    );
-    this.typedMessage = '';
+  fetchingTypedMessage(ev?: Event): void {
+    ev?.preventDefault();
+    if (!this.regexSendMsg.test(this.typedMessage)) {
+      this.messageSocketSvc.sendMessage(
+        this.typedMessage.trim(),
+        this.userData._id,
+        this.selectedContact._id
+      );
+      this.typedMessage = '';
+    }
   }
 
   isSendBtnDisabled(): boolean {
-    const regex = /^\s*$/;
-    return regex.test(this.typedMessage);
+    return this.regexSendMsg.test(this.typedMessage);
   }
 
   handleEmojiSelection(ev: { emoji: EmojiData }): void {
     console.log(ev.emoji.native);
     this.selectedEmoji = ev.emoji.native;
+
     this.typedMessage = this.typedMessage + this.selectedEmoji;
   }
 

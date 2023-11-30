@@ -5,14 +5,14 @@
 @layer components {
   .sentMsg {
     @apply text-right;
-    span {
-      @apply inline-block py-[10px] px-3 bg-secondaryColor mr-2 ml-4 rounded-lg;
+    .text-msg {
+      @apply inline-block py-[10px] pl-4 pr-[60px] bg-secondaryColor mr-2 ml-4 rounded-lg;
     }
   }
   .receiveMsg {
     @apply text-left;
-    span {
-      @apply inline-block py-[10px] px-3 bg-slate-500 ml-2 mr-4 rounded-lg;
+    .text-msg {
+      @apply inline-block py-[10px] pl-4 pr-[60px] bg-slate-500 ml-2 mr-4 rounded-lg;
     }
   }
 }
