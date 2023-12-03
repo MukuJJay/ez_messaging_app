@@ -14,7 +14,7 @@ export class MessageSocketService {
 
   sendMessage(msg: string, senderId: string, receiverId: string): void {
     this.socket.connect();
-    this.socket.emit('chatMsg', {
+    this.socket.emit('sendMsg', {
       msg: msg,
       senderId: senderId,
       receiverId: receiverId,
@@ -25,9 +25,10 @@ export class MessageSocketService {
     this.socket.on(eventName, callBack);
   }
 
-  receiveMessage(receiverId: string) {
-    const path = `${this.base_url}/message/receiveMessage`;
-    const payloadObj = { receiverId: receiverId };
-    return this.apiSvc.post(path, payloadObj);
+  receiveMessage(senderId: string, receiverId: string) {
+    this.socket.emit('receiveMsg', {
+      senderId: senderId,
+      receiverId: receiverId,
+    });
   }
 }

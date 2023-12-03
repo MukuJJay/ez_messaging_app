@@ -1,7 +1,9 @@
 import {
   AfterViewChecked,
+  AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -14,7 +16,7 @@ import { MessageSocketService } from 'src/app/services/socket/message-socket.ser
   templateUrl: './main-chat.component.html',
   styleUrls: ['./main-chat.component.scss'],
 })
-export class MainChatComponent implements OnInit, AfterViewChecked {
+export class MainChatComponent implements OnInit {
   allContacts: any[] = [];
   userData: any;
   selectedContact: any;
@@ -22,9 +24,12 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
   allConvo: any[] = [];
   isEmojiMartOpen: boolean = false;
   regexSendMsg: RegExp = /^\s*$/;
+  showScrollDownButton: boolean = false;
 
   selectedEmoji: EmojiData['native'] = '😘';
   @ViewChild('chatroom') chatroom!: ElementRef;
+  @ViewChild('emojiMart') emojiMart!: ElementRef;
+  @ViewChild('emojiMartBtn') emojiMartBtn!: ElementRef;
 
   constructor(
     private contactsSvc: ContactsService,
@@ -37,7 +42,7 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
     const localContact = sessionStorage.getItem('selectedContact');
     if (localContact) {
       this.selectedContact = JSON.parse(localContact ? localContact : '');
-      this.receivedMessages(this.selectedContact._id);
+      console.log('received ms');
     }
     //listen socket for messages
     this.messageSocketSvc.listenMessage('allConvo', (data: any) => {
@@ -46,21 +51,41 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngAfterViewChecked(): void {
-    this.scrollToBottom();
+  @HostListener('document:click', ['$event'])
+  clickout(event: Event) {
+    if (
+      !this.emojiMart?.nativeElement.contains(event.target) &&
+      !this.emojiMartBtn?.nativeElement.contains(event.target) &&
+      this.isEmojiMartOpen
+    ) {
+      this.isEmojiMartOpen = false;
+    }
+  }
+
+  scrollHandler(event: Event, divtowatch: Element, threshold: number) {
+    if (divtowatch.scrollTop < -threshold) {
+      this.showScrollDownButton = true;
+    } else {
+      this.showScrollDownButton = false;
+    }
   }
 
   initFn(): void {
     this.contactsSvc.getUserInfo().subscribe((res) => {
       this.allContacts = res.contacts;
       this.userData = res.data;
+      this.receivedMessages(this.userData._id, this.selectedContact._id);
     });
   }
 
-  scrollToBottom(): void {
+  scrollToBottom(divtowatch: ElementRef | Element): void {
     try {
-      const element = this.chatroom.nativeElement;
-      element.scrollTop = element.scrollHeight;
+      if ('nativeElement' in divtowatch) {
+        const element = divtowatch.nativeElement;
+        element.scrollTop = element.scrollHeight;
+      } else {
+        divtowatch.scrollTop = divtowatch.scrollHeight;
+      }
     } catch (error) {
       console.error('Error scrolling to bottom:', error);
     }
@@ -74,15 +99,12 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
     );
 
     //calling the receive messges api
-
-    this.receivedMessages(this.selectedContact._id);
+    this.receivedMessages(this.userData._id, this.selectedContact._id);
+    this.scrollToBottom(this.chatroom);
   }
 
-  receivedMessages(receiverId: string): void {
-    this.messageSocketSvc.receiveMessage(receiverId).subscribe((res: any) => {
-      console.log(res.data);
-      this.allConvo = res.data;
-    });
+  receivedMessages(senderId: string, receiverId: string): void {
+    this.messageSocketSvc.receiveMessage(senderId, receiverId);
   }
 
   clearSelectedContact(): void {
@@ -99,6 +121,7 @@ export class MainChatComponent implements OnInit, AfterViewChecked {
         this.selectedContact._id
       );
       this.typedMessage = '';
+      this.scrollToBottom(this.chatroom);
     }
   }
 

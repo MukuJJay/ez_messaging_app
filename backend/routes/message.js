@@ -14,8 +14,8 @@ const errorHandler = (req, res, fn) => {
   }
 };
 
-router.post("/receiveMessage", (req, res) =>
-  errorHandler(req, res, receiveMessage)
-);
+// router.post("/receiveMessage", (req, res) =>
+//   errorHandler(req, res, receiveMessage)
+// );
 
 export default router;

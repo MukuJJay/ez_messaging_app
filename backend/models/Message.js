@@ -4,6 +4,7 @@ const msgSchema = new mongoose.Schema(
   {
     msg: { type: String },
     seen: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    delivered: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: { createdAt: "createdAt" } }
 );

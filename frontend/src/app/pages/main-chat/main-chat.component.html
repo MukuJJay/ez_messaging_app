@@ -34,6 +34,13 @@
     class="w-4/6 relative md:w-screen h-screen md:fixed md:z-50 bg-primaryColor"
     *ngIf="selectedContact"
   >
+    <button
+      class="w-12 h-12 rounded-full !bg-slate-600 py-2 px-2 absolute z-10 bottom-[140px] left-[5%]"
+      *ngIf="showScrollDownButton"
+      (click)="scrollToBottom(chatroom)"
+    >
+      <i class="fa fa-lg fa-arrow-down text-gray-300"></i>
+    </button>
     <!-- header  -->
     <div
       class="w-full bg-darkestPrimaryColor flex justify-between items-center px-4 h-[10%]"
@@ -53,10 +60,14 @@
     </div>
 
     <!-- body  -->
-    <ul #chatroom class="w-full overflow-y-auto h-[75%]">
+    <ul
+      #chatroom
+      class="w-full overflow-y-auto h-[75%] flex flex-col-reverse gap-2"
+      (scroll)="scrollHandler($event, chatroom, 700)"
+    >
       <li
-        *ngFor="let convo of allConvo"
-        class="text-white my-2"
+        *ngFor="let convo of allConvo.reverse()"
+        class="text-white"
         [class.sentMsg]="
           selectedContact._id.toString() !== convo.senderId.toString()
         "
@@ -79,7 +90,7 @@
     <div
       class="relative w-full h-[15%] flex items-center justify-between gap-2 px-2"
     >
-      <div class="w-[10%] text-center">
+      <div #emojiMartBtn class="w-[10%] text-center">
         <button
           class="!text-2xl bg-darkestPrimaryColor !p-2 rounded-full sm:!p-1 sm:!text-lg"
           (click)="emojiBtnFn()"
@@ -96,7 +107,7 @@
         [(ngModel)]="typedMessage"
         maxlength="4096"
       ></textarea>
-      <div *ngIf="isEmojiMartOpen" class="absolute bottom-0 right-0">
+      <div #emojiMart *ngIf="isEmojiMartOpen" class="absolute bottom-0 right-0">
         <emoji-mart
           title="Pick your emoji…"
           emoji="point_up"

@@ -69,21 +69,23 @@ export const sendMessage = async (
   io.emit("allConvo", allConvo);
 };
 
-export const receiveMessage = async (req, res) => {
-  const userId = new mongoose.Types.ObjectId(handleToken(req));
-  const receiverId = new mongoose.Types.ObjectId(req.body.receiverId);
+export const receiveMessage = async (io, socket, { senderId, receiverId }) => {
+  const ObjectId = mongoose.Types.ObjectId;
+
+  const senderIdObj = new ObjectId(senderId);
+  const receiverIdObj = new ObjectId(receiverId);
 
   const allConvo = await Conversation.aggregate([
     {
       $match: {
         $or: [
           {
-            senderId: userId,
-            receiverId: receiverId,
+            senderId: senderIdObj,
+            receiverId: receiverIdObj,
           },
           {
-            senderId: receiverId,
-            receiverId: userId,
+            senderId: receiverIdObj,
+            receiverId: senderIdObj,
           },
         ],
       },
@@ -112,8 +114,5 @@ export const receiveMessage = async (req, res) => {
     },
   ]);
 
-  res.status(200).json({
-    status: 200,
-    data: allConvo,
-  });
+  io.emit("allConvo", allConvo);
 };
