@@ -10,6 +10,8 @@ import {
   receiveMessage,
   sendMessage,
 } from "./controllers/send-receiveMessage.controller.js";
+import { messageDelivered } from "./controllers/messageStatusChange.controller.js";
+
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -45,6 +47,7 @@ export const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+  messageDelivered(io);
   console.log("socket connected");
   socket.on("disconnect", () => {
     console.log("socket disconnected");

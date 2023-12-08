@@ -9,6 +9,11 @@ function handleToken(req) {
   return id;
 }
 
+function generateCommonId(ids) {
+  const sortedIds = ids.sort().join("-");
+  return sortedIds;
+}
+
 export const sendMessage = async (
   io,
   socket,
@@ -26,6 +31,11 @@ export const sendMessage = async (
     receiverId: receiverIdObj,
     messageId: message._id,
   });
+
+  const allIds = [senderId, receiverId];
+  const room = generateCommonId(allIds);
+
+  socket.join(room);
 
   const allConvo = await Conversation.aggregate([
     {
@@ -66,7 +76,7 @@ export const sendMessage = async (
     },
   ]);
 
-  io.emit("allConvo", allConvo);
+  io.to(room).emit("allConvo", allConvo);
 };
 
 export const receiveMessage = async (io, socket, { senderId, receiverId }) => {
@@ -114,5 +124,10 @@ export const receiveMessage = async (io, socket, { senderId, receiverId }) => {
     },
   ]);
 
-  io.emit("allConvo", allConvo);
+  const allIds = [senderId, receiverId];
+  const room = generateCommonId(allIds);
+
+  socket.join(room);
+
+  io.to(socket.id).emit("allConvo", allConvo);
 };

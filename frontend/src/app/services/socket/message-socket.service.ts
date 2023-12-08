@@ -13,7 +13,6 @@ export class MessageSocketService {
   constructor(private socket: Socket, private apiSvc: ApiService) {}
 
   sendMessage(msg: string, senderId: string, receiverId: string): void {
-    this.socket.connect();
     this.socket.emit('sendMsg', {
       msg: msg,
       senderId: senderId,
@@ -30,5 +29,9 @@ export class MessageSocketService {
       senderId: senderId,
       receiverId: receiverId,
     });
+  }
+
+  msgConnect(userId: string) {
+    this.socket.emit('msgConnected', userId);
   }
 }

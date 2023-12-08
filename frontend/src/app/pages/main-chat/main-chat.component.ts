@@ -80,11 +80,13 @@ export class MainChatComponent implements OnInit {
 
   scrollToBottom(divtowatch: ElementRef | Element): void {
     try {
-      if ('nativeElement' in divtowatch) {
-        const element = divtowatch.nativeElement;
-        element.scrollTop = element.scrollHeight;
-      } else {
-        divtowatch.scrollTop = divtowatch.scrollHeight;
+      if (divtowatch) {
+        if ('nativeElement' in divtowatch) {
+          const element = divtowatch.nativeElement;
+          element.scrollTop = element.scrollHeight;
+        } else {
+          divtowatch.scrollTop = divtowatch.scrollHeight;
+        }
       }
     } catch (error) {
       console.error('Error scrolling to bottom:', error);
