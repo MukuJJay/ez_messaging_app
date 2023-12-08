@@ -4,13 +4,12 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
-import userAuthRoutes from "./routes/userAuth.js";
-import contacts from "./routes/contacts.js";
-import message from "./routes/message.js";
+import userAuthRoutes from "./routes/userAuth.routes.js";
+import contacts from "./routes/contacts.routes.js";
 import {
   receiveMessage,
   sendMessage,
-} from "./controllers/send-receiveMessage.js";
+} from "./controllers/send-receiveMessage.controller.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -39,7 +38,6 @@ app.use(cors());
 
 app.use("/auth", userAuthRoutes);
 app.use("/user", contacts);
-app.use("/message", message);
 
 //io
 export const io = new Server(server, {

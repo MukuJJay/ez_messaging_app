@@ -47,10 +47,13 @@ export class ApiInterceptor implements HttpInterceptor {
   }
 
   apiHanndler(ev: any) {
-    if ((ev.status === 500 || ev.status === 400) && ev?.error.message) {
+    if (
+      (ev.status === 500 || ev.status === 400 || ev.status === 201) &&
+      ev?.error.message
+    ) {
       this.toastrSvc.error(ev?.error.message);
     }
-    if (ev.status === 201 || (ev.status === 200 && ev?.body.message)) {
+    if (ev.status === 200 && ev?.body.message) {
       this.toastrSvc.success(ev?.body.message);
     }
   }

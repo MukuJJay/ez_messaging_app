@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-import ChatRequest from "../models/ChatRequest.js";
+import User from "../models/User.model.js";
+import ChatRequest from "../models/ChatRequest.model.js";
 
 function findcommonId(arr1, arr2) {
   for (const item of arr1) {
@@ -34,7 +34,7 @@ export const sendChatRequest = async (req, res) => {
   });
 
   if (isReverseChatRequest) {
-    res.status(400).json({
+    res.status(201).json({
       message: `${receiver.username} already sent you a chat request`,
     });
     return;
@@ -147,7 +147,7 @@ export const addOrRemoveContactsRequests = async (req, res) => {
   }
 
   res
-    .status(400)
+    .status(201)
     .json({ message: "You are already friends. Stop being creepy !!!" });
 };
 
@@ -157,7 +157,7 @@ export const removeContacts = async (req, res) => {
   const { contactId } = req.body;
 
   if (!contactId) {
-    res.status(400).json({ message: "No contact_id provided" });
+    res.status(201).json({ message: "No contact_id provided" });
     return;
   }
 

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Conversation from "../models/Conversation.js";
-import Message from "../models/Message.js";
+import Conversation from "../models/Conversation.model.js";
+import Message from "../models/Message.model.js";
 import jwt from "jsonwebtoken";
 
 function handleToken(req) {

@@ -1,12 +1,12 @@
 import express from "express";
-import { searchUsers } from "../controllers/searchUsers.js";
+import { searchUsers } from "../controllers/searchUsers.controller.js";
 import {
   sendChatRequest,
   addOrRemoveContactsRequests,
   checkChatRequests,
   removeContacts,
-} from "../controllers/manageContacts.js";
-import { getUserInfo } from "../controllers/userInfo.js";
+} from "../controllers/manageContacts.controller.js";
+import { getUserInfo } from "../controllers/userInfo.controller.js";
 
 const router = express.Router();
 

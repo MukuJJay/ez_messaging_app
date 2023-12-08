@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import User from "../models/User.model.js";
 
 export const getUserInfo = async (req, res) => {
   const token = req.headers.authorization.slice(7).trim();
   const userId = jwt.verify(token, process.env.JWT_SECRET).id;
 
   if (!userId) {
-    res.status(400).json({ message: "Invalid token" });
+    res.status(201).json({ message: "Invalid token" });
     return;
   }
 
